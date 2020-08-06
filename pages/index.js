@@ -6,7 +6,7 @@ import useSocket from '../hooks/useSocket';
 export default function ChatOne() {
 	const [field, setField] = useState('');
 	const [newMessage, setNewMessage] = useState(0);
-	const [messages, setMessages] = useState();
+	const [messages, setMessages] = useState([]);
 
 	const socket = useSocket('events', (message) => {
 		setMessages((messages) => [...messages, message]);
