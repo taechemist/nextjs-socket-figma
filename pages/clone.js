@@ -3,10 +3,10 @@ import Link from 'next/link'
 import fetch from 'isomorphic-unfetch'
 import useSocket from '../hooks/useSocket'
 
-export default function ChatOne(props) {
+export default function ChatOne() {
   const [field, setField] = useState('')
   const [newMessage, setNewMessage] = useState(0)
-  const [messages, setMessages] = useState(props.messages || [])
+  const [messages, setMessages] = useState([])
 
   const socket = useSocket('message.chat2', message => {
     setMessages(messages => [...messages, message])
@@ -64,10 +64,4 @@ export default function ChatOne(props) {
   )
 }
 
-ChatOne.getInitialProps = async () => {
-  const sitePath = process.env.SITEPATH
-	const response = await fetch('http://localhost:3000/messages/chat2');
-  const messages = await response.json()
 
-  return { messages }
-}

@@ -2,6 +2,7 @@ const app = require('express')();
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
 const next = require('next');
+const bodyParser = require('body-parser');
 
 const port = parseInt(process.env.PORT, 10) || 3000;
 const dev = process.env.NODE_ENV !== 'production';
@@ -14,6 +15,8 @@ const messages = {
 	chat2: [],
 };
 
+const jsonParser = bodyParser.json()
+
 // socket.io server
 io.on('connection', (socket) => {
 	socket.on('message.chat1', (data) => {
@@ -24,15 +27,12 @@ io.on('connection', (socket) => {
 		messages['chat2'].push(data);
 		socket.broadcast.emit('message.chat2', data);
 	});
+	socket.on('events', (data) => {
+		socket.broadcast.emit('events', data);
+	});
 });
 
 nextApp.prepare().then(() => {
-
-	app.post('/events', (req, res) => {
-		io.emit('events', req)
-		console.log(req)
-		return res.status(200).send('Success');
-	});
 
 	app.get('/messages/:chat', (req, res) => {
 		res.json(messages[req.params.chat]);
@@ -41,6 +41,14 @@ nextApp.prepare().then(() => {
 	app.get('*', (req, res) => {
 		return nextHandler(req, res);
 	});
+
+	app.post('/events',jsonParser , (req, res) => {
+		io.sockets.emit('events', req.body);
+		console.log(req.body);
+		res.statusCode = 200
+    res.setHeader('Content-Type', 'application/json')
+    res.json({status: "success"});
+	})
 
 	server.listen(port, (err) => {
 		if (err) throw err;

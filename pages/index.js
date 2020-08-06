@@ -8,8 +8,9 @@ export default function ChatOne() {
 	const [newMessage, setNewMessage] = useState(0);
 	const [messages, setMessages] = useState([]);
 
-	const socket = useSocket('events', (message) => {
-		setMessages((messages) => [...messages, message]);
+	useSocket('events', (message) => {
+		// setMessages(message);
+		console.log(message)
 	});
 
 	// useSocket('message.chat2', () => {
@@ -46,8 +47,8 @@ export default function ChatOne() {
 					</a>
 				</Link>
 				<ul>
-					{messages.map((message) => (
-						<li key={message.id}>{message.toString()}</li>
+					{messages && messages.map((message, i) => (
+						<li key={i}>{typeof message}</li>
 					))}
 				</ul>
 				<form >
