@@ -27,6 +27,13 @@ io.on('connection', (socket) => {
 });
 
 nextApp.prepare().then(() => {
+
+	app.post('/events', (req, res) => {
+		io.emit('events', req)
+		console.log(req)
+		return res.status(200).send('Success');
+	});
+
 	app.get('/messages/:chat', (req, res) => {
 		res.json(messages[req.params.chat]);
 	});

@@ -65,7 +65,8 @@ export default function ChatOne(props) {
 }
 
 ChatOne.getInitialProps = async () => {
-  const response = await fetch('http://localhost:3000/messages/chat2')
+  const sitePath = process.env.SITEPATH
+	const response = await fetch('http://localhost:3000/messages/chat2');
   const messages = await response.json()
 
   return { messages }

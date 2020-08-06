@@ -3,33 +3,33 @@ import Link from 'next/link';
 import fetch from 'isomorphic-unfetch';
 import useSocket from '../hooks/useSocket';
 
-export default function ChatOne(props) {
+export default function ChatOne() {
 	const [field, setField] = useState('');
 	const [newMessage, setNewMessage] = useState(0);
-	const [messages, setMessages] = useState(props.messages || []);
+	const [messages, setMessages] = useState();
 
-	const socket = useSocket('message.chat1', (message) => {
+	const socket = useSocket('events', (message) => {
 		setMessages((messages) => [...messages, message]);
 	});
 
-	useSocket('message.chat2', () => {
-		setNewMessage((newMessage) => newMessage + 1);
-	});
+	// useSocket('message.chat2', () => {
+	// 	setNewMessage((newMessage) => newMessage + 1);
+	// });
 
-	const handleSubmit = (event) => {
-		event.preventDefault();
+	// const handleSubmit = (event) => {
+	// 	event.preventDefault();
 
-		// create message object
-		const message = {
-			id: new Date().getTime(),
-			value: field,
-		};
+	// 	// create message object
+	// 	const message = {
+	// 		id: new Date().getTime(),
+	// 		value: field,
+	// 	};
 
-		// send object to WS server
-		socket.emit('message.chat1', message);
-		setField('');
-		setMessages((messages) => [...messages, message]);
-	};
+	// 	// send object to WS server
+	// 	socket.emit('message.chat1', message);
+	// 	setField('');
+	// 	setMessages((messages) => [...messages, message]);
+	// };
 
 	return (
 		<main>
@@ -47,10 +47,10 @@ export default function ChatOne(props) {
 				</Link>
 				<ul>
 					{messages.map((message) => (
-						<li key={message.id}>{message.value}</li>
+						<li key={message.id}>{message.toString()}</li>
 					))}
 				</ul>
-				<form onSubmit={(e) => handleSubmit(e)}>
+				<form >
 					<input
 						onChange={(e) => setField(e.target.value)}
 						type='text'
@@ -65,8 +65,5 @@ export default function ChatOne(props) {
 }
 
 ChatOne.getInitialProps = async () => {
-	const response = await fetch('http://localhost:3000/messages/chat1');
-	const messages = await response.json();
 
-	return { messages };
 };
