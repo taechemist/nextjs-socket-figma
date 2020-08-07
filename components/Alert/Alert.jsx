@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 
+const textColor = '#149173';
+
 const AlertStyle = styled.div`
   font-size: 1.5em;
   text-align: center;
@@ -15,6 +17,7 @@ const AlertStyle = styled.div`
 const Heading6 = styled.h6`
   padding: 0;
   margin: 0;
+  color: ${textColor};
 `;
 
 const Box = styled.div`
@@ -29,6 +32,7 @@ const Paragraph = styled.p`
   font-size: 14px;
   padding: 0;
   margin: 0;
+  color: #23A973;
 `;
 
 const Alert = React.forwardRef((props, ref) => {
