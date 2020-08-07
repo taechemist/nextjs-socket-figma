@@ -9,7 +9,7 @@ export default function ChatOne() {
 
 	const getUniqueKey = () => {
 		const key = Date.now();
-		console.log(key);
+		// console.log(key);
 		return key;
 	}
 
