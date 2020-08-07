@@ -45,7 +45,7 @@ const Alert = React.forwardRef((props, ref) => {
       <Box display="flex" flexDirection="column" justifyContent="flex-start" alignItems="flex-start">
         <Heading6>{event.event_type ? event.event_type : 'Unknown event'}</Heading6>
         <Paragraph>Filename: {event.file_name ? event.file_name : 'Unknown file name'}</Paragraph>
-        <Paragraph>Initiator: {event.triggered_by && (event.triggered_by.handle ? event.triggered_by.handle : 'Unknown initiator')}</Paragraph>
+        <Paragraph>Initiator: {event.triggered_by ? (event.triggered_by.handle ? event.triggered_by.handle : 'Unknown initiator') : 'Unknown initiator'}</Paragraph>
       </Box>
     </AlertStyle>
   );
