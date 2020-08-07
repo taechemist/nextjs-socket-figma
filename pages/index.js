@@ -1,8 +1,21 @@
 import { useState } from 'react';
-import Link from 'next/link';
-import fetch from 'isomorphic-unfetch';
 import useSocket from '../hooks/useSocket';
 import FlipMove from 'react-flip-move';
+import Head from 'next/head';
+import Alert from '../components/Alert';
+import styled from 'styled-components';
+
+import styles from '../styles/Home.module.css';
+
+const Box = styled.div`
+  display: ${props => props.display || 'flex'};
+  flex-direction: ${props => props.flexDirection};
+  justify-content: ${props => props.justifyContent};
+	align-items: ${props => props.alignItems};
+	height: 80vh;
+	overflow: hidden;
+	width: 400px;
+`;
 
 export default function ChatOne() {
 	const [events, setEvents] = useState([]);
@@ -20,18 +33,18 @@ export default function ChatOne() {
 	});
 
 	return (
-		<>
-			<FlipMove enterAnimation="fade" leaveAnimation="fade" verticalAlignment="top">
-				{events && events.map((event) =>
-					<div key={event.uid}>
-						{event.event_type && event.event_type} | 
-						{event.file_name && event.file_name} |
-						{event.file_name && event.file_name} |
-						{event.triggered_by && event.triggered_by.handle}
-					</div>
-				)}
-			</FlipMove>
-		</>
+		<div className={styles.container}>
+				<Head>
+					<title>Figma Web Feed</title>
+				</Head>
+				<Box>
+					<FlipMove enterAnimation="fade" leaveAnimation="fade" verticalAlignment="top" style={{width: '100%'}}>
+						{events && events.map((event) =>
+							<Alert key={event.uid} eventData={event} />
+						)}
+					</FlipMove>
+					</Box>
+			</div>
 	);
 }
 
