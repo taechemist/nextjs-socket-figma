@@ -2,69 +2,39 @@ import { useState } from 'react';
 import Link from 'next/link';
 import fetch from 'isomorphic-unfetch';
 import useSocket from '../hooks/useSocket';
+import FlipMove from 'react-flip-move';
 
 export default function ChatOne() {
-	const [field, setField] = useState('');
-	const [newMessage, setNewMessage] = useState(0);
-	const [messages, setMessages] = useState([]);
+	const [events, setEvents] = useState([]);
 
-	useSocket('events', (message) => {
-		// setMessages(message);
-		console.log(message)
+	const getUniqueKey = () => {
+		const key = Date.now();
+		console.log(key);
+		return key;
+	}
+
+	useSocket('events', (e) => {
+		e['uid'] = getUniqueKey();
+		setEvents(events => [e, ...events])
+		// console.log(e)
 	});
 
-	// useSocket('message.chat2', () => {
-	// 	setNewMessage((newMessage) => newMessage + 1);
-	// });
-
-	// const handleSubmit = (event) => {
-	// 	event.preventDefault();
-
-	// 	// create message object
-	// 	const message = {
-	// 		id: new Date().getTime(),
-	// 		value: field,
-	// 	};
-
-	// 	// send object to WS server
-	// 	socket.emit('message.chat1', message);
-	// 	setField('');
-	// 	setMessages((messages) => [...messages, message]);
-	// };
-
 	return (
-		<main>
-			<div>
-				<Link href='/'>
-					<a>{'Chat One'}</a>
-				</Link>
-				<br />
-				<Link href='/clone'>
-					<a>
-						{`Chat Two${
-							newMessage > 0 ? ` ( ${newMessage} new message )` : ''
-						}`}
-					</a>
-				</Link>
-				<ul>
-					{messages && messages.map((message, i) => (
-						<li key={i}>{typeof message}</li>
-					))}
-				</ul>
-				<form >
-					<input
-						onChange={(e) => setField(e.target.value)}
-						type='text'
-						placeholder='Hello world!'
-						value={field}
-					/>
-					<button>Send</button>
-				</form>
-			</div>
-		</main>
+		<>
+			<FlipMove enterAnimation="fade" leaveAnimation="fade" verticalAlignment="top">
+				{events && events.map((event) =>
+					<div key={event.uid}>
+						{event.event_type && event.event_type} | 
+						{event.file_name && event.file_name} |
+						{event.file_name && event.file_name} |
+						{event.triggered_by && event.triggered_by.handle}
+					</div>
+				)}
+			</FlipMove>
+		</>
 	);
 }
 
-ChatOne.getInitialProps = async () => {
+// ChatOne.getInitialProps = async () => {
 
-};
+// };
