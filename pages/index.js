@@ -38,6 +38,7 @@ export default function ChatOne() {
 					<title>Figma Web Feed</title>
 				</Head>
 				<Box>
+					{!events.length && <Box>Listening to events...</Box>}
 					<FlipMove enterAnimation="fade" leaveAnimation="fade" verticalAlignment="top" style={{width: '100%'}}>
 						{events && events.map((event) =>
 							<Alert key={event.uid} eventData={event} />
